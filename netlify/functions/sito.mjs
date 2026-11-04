@@ -28,6 +28,8 @@ export default async (req) => {
 
   if (req.method === "GET") {
     const c = await store.get("config", { type: "json" });
+    // ?v=1 -> solo il numero di versione (risposta minuscola per il controllo ad ogni visita)
+    if (new URL(req.url).searchParams.has("v")) return J({ v: c ? c.v : 0 });
     return J(c || { v: 0, d: null });
   }
   if (req.method !== "POST") return J({ ok: false, err: "metodo" }, 405);
